@@ -1,0 +1,19 @@
+{
+  "name": "spotifyproject",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "dotenv": "^16.5.0",
+    "spotify-web-api-node": "^5.0.2",
+    "youtube-search-api": "^1.2.2"
+  }
+}
