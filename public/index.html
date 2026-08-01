@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Playlist Downloader</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>" />
+</head>
+<body>
+    <div class="shell">
+        <header class="masthead">
+            <div class="wordmark">
+                <span class="dot" aria-hidden="true"></span>
+                <h1>Playlist Downloader</h1>
+            </div>
+            <p class="tagline">Paste a Spotify track, album or playlist link and pull the audio down as local files.</p>
+        </header>
+
+        <div id="config-warning" class="banner banner--warn" hidden>
+            <strong>Spotify credentials missing.</strong>
+            <span>Create a <code>.env</code> with <code>SPOTIFY_CLIENT_ID</code> and <code>SPOTIFY_CLIENT_SECRET</code>, then restart the server.</span>
+        </div>
+
+        <section class="card search-card">
+            <form id="resolve-form" autocomplete="off">
+                <div class="field">
+                    <input
+                        id="url"
+                        type="url"
+                        placeholder="https://open.spotify.com/playlist/…"
+                        aria-label="Spotify link"
+                        required
+                    />
+                    <button type="submit" class="btn btn--primary" id="resolve-btn">Look up</button>
+                </div>
+                <div class="field-meta">
+                    <label class="select-wrap">
+                        Format
+                        <select id="format">
+                            <option value="mp3">MP3</option>
+                            <option value="m4a">M4A</option>
+                            <option value="wav">WAV</option>
+                            <option value="opus">Opus</option>
+                        </select>
+                    </label>
+                    <span id="hint" class="hint">Public playlists only.</span>
+                </div>
+            </form>
+            <p id="error" class="error" hidden></p>
+        </section>
+
+        <section class="card" id="result" hidden>
+            <div class="release">
+                <img id="release-art" class="release__art" alt="" />
+                <div class="release__text">
+                    <span id="release-kind" class="pill"></span>
+                    <h2 id="release-title"></h2>
+                    <p id="release-sub" class="muted"></p>
+                </div>
+                <div class="release__actions">
+                    <button type="button" class="btn btn--ghost" id="toggle-all">Deselect all</button>
+                    <button type="button" class="btn btn--primary" id="download-btn">Download</button>
+                    <button type="button" class="btn btn--danger" id="cancel-btn" hidden>Stop</button>
+                </div>
+            </div>
+
+            <div class="progress" id="progress" hidden>
+                <div class="progress__bar"><span id="progress-fill"></span></div>
+                <p class="progress__label"><span id="progress-text">Starting…</span></p>
+            </div>
+
+            <ol class="tracks" id="tracks"></ol>
+        </section>
+
+        <section class="card" id="library-card">
+            <div class="library-head">
+                <h2>Downloaded files</h2>
+                <button type="button" class="btn btn--ghost" id="refresh-files">Refresh</button>
+            </div>
+            <p class="muted mono" id="library-path"></p>
+            <ul class="files" id="files"></ul>
+        </section>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+</body>
+</html>

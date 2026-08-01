@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+    "start": "node server.js",
+    "cli": "node PlaylistDownloader.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +15,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "dotenv": "^16.5.0",
+    "express": "^5.2.1",
     "spotify-web-api-node": "^5.0.2",
     "youtube-search-api": "^1.2.2"
   }

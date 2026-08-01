@@ -60,30 +60,50 @@ npm install
 #SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 ```
 
-# 🎶 Command to run
+# 🖥️ Web UI (recommended)
 ```bash
-node PlaylistDownloader.js "https://open.spotify.com/playlist/<playlist-id>"
+npm start
+# → http://localhost:3000
+```
+
+Paste a Spotify **track, album or playlist** link, review the tracklist, untick anything
+you don't want, pick a format and hit **Download**. Progress streams live per track, and
+finished files are listed at the bottom of the page for download from the browser.
+
+# 🎶 Command line
+```bash
+npm run cli -- "https://open.spotify.com/playlist/<playlist-id>"
+```
+
+Files are written to `./downloads` (override with `DOWNLOAD_DIR` in `.env`).
+
 ```
 .
-├── PlaylistDownloader.js       # Main script
+├── server.js                   # Express server + progress streaming
+├── PlaylistDownloader.js       # CLI entry point
+├── lib/downloader.js           # Shared Spotify → YouTube → yt-dlp logic
+├── public/                     # Frontend (index.html, styles.css, app.js)
 ├── .env                        # Contains your Spotify credentials
 ├── package.json
 └── README.md
+```
 
 ## ⚠️ Limitations
 
 - Only supports **public playlists**
-- Only downloads the **first 100 tracks** (pagination not implemented yet)
 - YouTube match quality depends on **keyword search** — may not always be perfect
+- The server is meant for **local use** — it has no authentication
 
 ---
 
 ## ✅ To-Do
 
-- [ ] Add pagination for large playlists (100+ songs)
-- [ ] Show progress bar for downloads
-- [ ] Support downloading individual tracks
-- [ ] Allow format selection (e.g., `mp3`, `m4a`, `wav`)
+- [x] Add pagination for large playlists (100+ songs)
+- [x] Show progress for downloads
+- [x] Support downloading individual tracks
+- [x] Allow format selection (e.g., `mp3`, `m4a`, `wav`)
+- [ ] Parallel downloads with a configurable concurrency limit
+- [ ] Write ID3 tags (title / artist / album art) onto the saved files
 
 ---
 
