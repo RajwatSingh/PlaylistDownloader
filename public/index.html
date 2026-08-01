@@ -24,6 +24,14 @@
 
         <section class="card search-card">
             <form id="resolve-form" autocomplete="off">
+                <div class="modes" role="radiogroup" aria-label="What to download">
+                    <button type="button" class="mode is-active" data-mode="playlist" role="radio" aria-checked="true">
+                        Playlist
+                    </button>
+                    <button type="button" class="mode" data-mode="track" role="radio" aria-checked="false">
+                        Single song
+                    </button>
+                </div>
                 <div class="field">
                     <input
                         id="url"
@@ -44,7 +52,7 @@
                             <option value="opus">Opus</option>
                         </select>
                     </label>
-                    <span id="hint" class="hint">Public playlists only.</span>
+                    <span id="hint" class="hint">Public playlists and albums.</span>
                 </div>
             </form>
             <p id="error" class="error" hidden></p>

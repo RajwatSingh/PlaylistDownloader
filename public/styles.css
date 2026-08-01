@@ -100,6 +100,41 @@ code {
 }
 
 /* --- search --- */
+.modes {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    margin-bottom: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+}
+
+.mode {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.mode:hover:not(.is-active) { color: var(--text); }
+
+.mode.is-active {
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.mode:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 .field { display: flex; gap: 10px; }
 
 input[type="url"] {

@@ -2,6 +2,8 @@ const $ = (id) => document.getElementById(id);
 
 const el = {
     form: $('resolve-form'),
+    modes: document.querySelectorAll('.mode'),
+    hint: $('hint'),
     url: $('url'),
     format: $('format'),
     resolveBtn: $('resolve-btn'),
@@ -24,9 +26,39 @@ const el = {
     refreshFiles: $('refresh-files'),
 };
 
+const MODES = {
+    playlist: {
+        placeholder: 'https://open.spotify.com/playlist/…',
+        hint: 'Public playlists and albums.',
+        button: 'Download all',
+    },
+    track: {
+        placeholder: 'https://open.spotify.com/track/…',
+        hint: 'A single Spotify song link.',
+        button: 'Download song',
+    },
+};
+
+let mode = 'playlist';
 let current = null; // { url, tracks }
 let stream = null;
 let jobId = null;
+
+function setMode(next) {
+    mode = next;
+    el.modes.forEach((btn) => {
+        const active = btn.dataset.mode === next;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-checked', String(active));
+    });
+    el.url.placeholder = MODES[next].placeholder;
+    el.hint.textContent = MODES[next].hint;
+    el.downloadBtn.textContent = MODES[next].button;
+    // the old result belongs to the other mode, so clear it rather than leave it stale
+    el.result.hidden = true;
+    current = null;
+    showError('');
+}
 
 function showError(message) {
     el.error.textContent = message;
@@ -78,6 +110,8 @@ function renderTracks(tracks) {
         el.tracks.append(li);
     });
     el.toggleAll.textContent = 'Deselect all';
+    // picking a subset is meaningless for one song
+    el.toggleAll.hidden = tracks.length < 2;
 }
 
 async function resolveUrl(event) {
@@ -90,7 +124,7 @@ async function resolveUrl(event) {
         const res = await fetch('/api/resolve', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: el.url.value }),
+            body: JSON.stringify({ url: el.url.value, mode }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Lookup failed.');
@@ -123,7 +157,8 @@ function setRunning(running) {
     el.resolveBtn.disabled = running;
     el.toggleAll.disabled = running;
     el.cancelBtn.hidden = !running;
-    el.downloadBtn.textContent = running ? 'Downloading…' : 'Download';
+    el.downloadBtn.textContent = running ? 'Downloading…' : MODES[mode].button;
+    el.modes.forEach((btn) => (btn.disabled = running));
 }
 
 function updateProgress(done, total) {
@@ -196,7 +231,7 @@ async function startDownload() {
         const res = await fetch('/api/jobs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: current.url, format: el.format.value, indices }),
+            body: JSON.stringify({ url: current.url, format: el.format.value, indices, mode }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Could not start the download.');
@@ -259,6 +294,7 @@ async function loadHealth() {
     el.warning.hidden = data.configured;
 }
 
+el.modes.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
 el.form.addEventListener('submit', resolveUrl);
 el.downloadBtn.addEventListener('click', startDownload);
 el.cancelBtn.addEventListener('click', cancelJob);
@@ -270,5 +306,6 @@ el.toggleAll.addEventListener('click', () => {
     el.toggleAll.textContent = next ? 'Deselect all' : 'Select all';
 });
 
+setMode('playlist');
 loadHealth();
 loadFiles();

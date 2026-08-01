@@ -32,7 +32,7 @@ app.get('/api/health', (req, res) => {
 // step 1: look up the link so the user can review the tracklist before downloading
 app.post('/api/resolve', async (req, res) => {
     try {
-        const data = await resolveSpotifyUrl(String(req.body.url || '').trim());
+        const data = await resolveSpotifyUrl(String(req.body.url || '').trim(), req.body.mode || 'auto');
         res.json(data);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -41,9 +41,9 @@ app.post('/api/resolve', async (req, res) => {
 
 // step 2: kick off a background job and hand back an id to stream from
 app.post('/api/jobs', async (req, res) => {
-    const { url, format = 'mp3', indices } = req.body || {};
+    const { url, format = 'mp3', indices, mode = 'auto' } = req.body || {};
     try {
-        const data = await resolveSpotifyUrl(String(url || '').trim());
+        const data = await resolveSpotifyUrl(String(url || '').trim(), mode);
         const selected = Array.isArray(indices) && indices.length
             ? indices.map((i) => data.tracks[i]).filter(Boolean)
             : data.tracks;

@@ -66,9 +66,15 @@ npm start
 # → http://localhost:3000
 ```
 
-Paste a Spotify **track, album or playlist** link, review the tracklist, untick anything
-you don't want, pick a format and hit **Download**. Progress streams live per track, and
-finished files are listed at the bottom of the page for download from the browser.
+Pick **Playlist** or **Single song** at the top, paste the matching Spotify link, review the
+tracklist, untick anything you don't want, choose a format and hit **Download**. Progress
+streams live per track, and finished files are listed at the bottom of the page for download
+from the browser.
+
+- **Playlist** mode accepts playlist *and* album links.
+- **Single song** mode accepts one track link.
+- Pasting the wrong kind of link is rejected immediately with a message telling you which
+  mode to switch to.
 
 # 🎶 Command line
 ```bash
